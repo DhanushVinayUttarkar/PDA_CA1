@@ -22,7 +22,14 @@ def create_dataset():
 
 def preprocess_dataset():
     df = pd.read_csv('Time_Series_Stock_data.csv')
-    print(df.head())
+    # print(df.head())
+    # print(df.info())
+    check_missing = df.isnull()
+    # print(check_missing)
+    for column in check_missing.columns.values.tolist():
+        print(column)
+        print(check_missing[column].value_counts())
+        print("")
 
 
 if __name__ == '__main__':
