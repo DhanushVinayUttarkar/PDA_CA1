@@ -1,6 +1,7 @@
 import requests
 import pandas as pd
-import config
+from pymongo import MongoClient
+import config as cfg
 
 
 # Creates a new stock market monthly dataset using the alpha-vantage api
@@ -11,7 +12,7 @@ def create_dataset():
 
     # X-RapidAPI-Key contains your rapid API key
     headers = {
-        "X-RapidAPI-Key": config.apikey,
+        "X-RapidAPI-Key": cfg.apikey,
         "X-RapidAPI-Host": "alpha-vantage.p.rapidapi.com"
     }
 
@@ -25,6 +26,37 @@ def preprocess_dataset():
     print(df.head())
 
 
+def connect_to_database():
+    # Create a connection using MongoClient. You can import MongoClient or use pymongo.MongoClient
+    client = MongoClient(cfg.connection_string)
+
+    # database and collection code goes here
+    db = client.sample_guides
+    coll = db.comets
+
+    coll.drop()
+    # insert code goes here
+    docs = [
+        {"name": "Halley's Comet", "officialName": "1P/Halley", "orbitalPeriod": 75, "radius": 3.4175, "mass": 2.2e14},
+        {"name": "Wild2", "officialName": "81P/Wild", "orbitalPeriod": 6.41, "radius": 1.5534, "mass": 2.3e13},
+        {"name": "Comet Hyakutake", "officialName": "C/1996 B2", "orbitalPeriod": 17000, "radius": 0.77671,
+         "mass": 8.8e12},
+    ]
+    result = coll.insert_many(docs)
+    # display the results of your operation
+    print(result.inserted_ids, "\n")
+
+    # find code goes here
+    cursor = coll.find({"officialName": "1P/Halley"})
+
+    # iterate code goes here
+    for doc in cursor:
+        print(doc)
+
+    # Close the connection to MongoDB when you're done.
+    client.close()
+
+
 if __name__ == '__main__':
-    #create_dataset()
+    # create_dataset()
     preprocess_dataset()
