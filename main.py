@@ -67,6 +67,15 @@ def create_database_and_store():
         print(doc)
 
     client.close()
+    
+    # print(df.head())
+    # print(df.info())
+    check_missing = df.isnull()
+    # print(check_missing)
+    for column in check_missing.columns.values.tolist():
+        print(column)
+        print(check_missing[column].value_counts())
+        print("")
 
 
 if __name__ == '__main__':
