@@ -56,7 +56,7 @@ def create_database_and_store():
     df.reset_index(inplace=True)
     data_dict = df.to_dict('records')
     # print(data_dict)
-    result = coll.insert_many(data_dict)
+    coll.insert_many(data_dict)
     # print(client.list_database_names())
 
     # find code goes here
