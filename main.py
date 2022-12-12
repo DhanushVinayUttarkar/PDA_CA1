@@ -79,6 +79,6 @@ def create_database_and_store():
 
 
 if __name__ == '__main__':
-    #create_dataset()
+    create_dataset()
     preprocess_data()
-    #create_database_and_store()
+    create_database_and_store()
