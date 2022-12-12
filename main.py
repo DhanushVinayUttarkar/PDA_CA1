@@ -33,7 +33,7 @@ def preprocess_data():
     print("\nafter sorting\n", df.head(), "\n")
 
     figure(figsize=(15, 8), dpi=80, linewidth=10)
-    plt.plot(df['timestamp'], df['volume'], color="r")
+    plt.plot(df['timestamp'], df['close'], color="r")
     plt.title('Missing value check')
     plt.xlabel('Years', fontsize=14)
     plt.ylabel('volume of shares sold', fontsize=14)
@@ -43,10 +43,10 @@ def preprocess_data():
 
 
 def create_database_and_store():
-    # Create a connection using MongoClient. You can import MongoClient or use pymongo.MongoClient
+    # Create a connection using MongoClient
     client = MongoClient(cfg.connection_string)
 
-    # database and collection code goes here
+    # database and collection code initialization code
     db = client.stockmarket_timeseries
     coll = db.Apple_stock
 
@@ -59,7 +59,6 @@ def create_database_and_store():
     coll.insert_many(data_dict)
     # print(client.list_database_names())
 
-    # find code goes here
     cursor = coll.find({"index": 3})
 
     # iterate code goes here
