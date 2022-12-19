@@ -16,7 +16,7 @@ Use Git (e.g. GitHub / Colab) and commit/pin version regularly.
 
 # Report
 In this assignment I have set up a GitHub repository to commit all the code in the project to.
-This Repository can be found at <a href="https://github.com/DhanushVinayUttarkar/PDA_CA1" text="This Repository Link"/>
+This Repository can be found at: https://www.github.com/DhanushVinayUttarkar/PDA_CA1
 
 This project can be divided into mainly 3 parts:
 1. Fetching the data using an API and storing it in a csv file
