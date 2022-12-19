@@ -1,3 +1,4 @@
+import pymongo
 import requests
 import pandas as pd
 from pymongo import MongoClient
@@ -27,16 +28,23 @@ def preprocess_data():
     df = pd.read_csv('Time_Series_Stock_data.csv')
     # print(df.info(), "\n")
     df['timestamp'] = pd.to_datetime(df['timestamp'])
-    # print(df.info())
-    print("before sorting\n", df.head())
-    df.sort_values(by=['timestamp'], inplace=True, ascending=True)
-    print("\nafter sorting\n", df.head(), "\n")
+    print(df.info())
 
     figure(figsize=(15, 8), dpi=80, linewidth=10)
-    plt.plot(df['timestamp'], df['close'], color="r")
+    plt.plot(df['timestamp'], df['open'], color="red")
+    plt.plot(df['timestamp'], df['close'], color="blue")
+    plt.plot(df['timestamp'], df['high'], color="green")
+    plt.plot(df['timestamp'], df['low'], color="cyan")
     plt.title('Missing value check')
     plt.xlabel('Years', fontsize=14)
-    plt.ylabel('volume of shares sold', fontsize=14)
+    plt.ylabel('open, close, high, low', fontsize=14)
+    plt.show()
+
+    figure(figsize=(15, 8), dpi=80, linewidth=10)
+    plt.plot(df['timestamp'], df['volume'], color="violet")
+    plt.title('Missing value check')
+    plt.xlabel('Years', fontsize=14)
+    plt.ylabel('volume', fontsize=14)
     plt.show()
 
     return df
@@ -58,14 +66,6 @@ def create_database_and_store():
     # print(data_dict)
     coll.insert_many(data_dict)
     # print(client.list_database_names())
-
-    cursor = coll.find({"index": 3})
-
-    # iterate code goes here
-    for doc in cursor:
-        print(doc)
-
-    client.close()
     
     # print(df.head())
     # print(df.info())
@@ -76,8 +76,28 @@ def create_database_and_store():
         print(check_missing[column].value_counts())
         print("")
 
+    # database operations
+
+    # fetch data with the index value 3
+    data = coll.find({"index": 3})
+    for doc in data:
+        print("The value in collection at index 3 is:", doc)
+        print("\n")
+
+    # Find the largest high and low value
+    data1 = coll.find().sort("open", -1).limit(1)
+    for doc1 in data1:
+        print("The largest value at open in the collection is:", doc1)
+        print("\n")
+
+    data2 = coll.find().sort("close", -1).limit(1)
+    for doc2 in data2:
+        print("The largest value at close in the collection is:", doc2)
+        print("\n")
+
+    client.close()
+
 
 if __name__ == '__main__':
     create_dataset()
-    preprocess_data()
     create_database_and_store()
